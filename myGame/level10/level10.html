@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Кінець гри</title>
+<style>
+    body {
+        user-select: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #760cbd; /* додамо фон */
+    }
+    #game-area {
+        width: 100%;
+        height: 100vh;
+        background-color: #760cbd;
+        position: relative;
+        border-radius: 10px;
+    }
+    h1 {
+        font-size: 3rem;
+        color: #e2dada;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin: 20px;
+        padding: 30px;
+        background-color: #9710f1;
+        border-radius: 10px;
+        box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+    }
+    #end-game-button {
+        position: absolute;
+        top: 80%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        cursor: pointer;
+        background-color: #ffcc00;
+        color: #333;
+        border: none;
+        padding: 10px 20px;
+        font-size: 18px;
+        font-family: Arial, sans-serif;
+        transition: transform 0.3s ease, left 0.3s ease, top 0.3s ease;
+        border-radius: 10px;
+        z-index: 2;
+    }
+    #end-game-button:hover {
+        background-color: #ffdb4d;
+    }
+    #feedback-form {
+        top: 35%;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        height: 300px;
+        max-width: 600px;
+        background-color: #9710f1;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+    }
+    .stars-container {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+    .star {
+        font-size: 24px;
+        color: #ffd700;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    }
+    .star:hover {
+        transform: scale(1.2);
+    }
+    .star.active {
+        color: #ffac33;
+    }
+    #feedback-text {
+        width: 97%;
+        height: 200px;
+        resize: none;
+        margin-bottom: 10px;
+        padding: 5px;
+        border: 1px solid #760cbd;
+        border-radius: 5px;
+        background-color: #760cbd;
+    }
+    #submit-feedback {
+        display: block;
+        margin: 0 auto;
+        padding: 8px 16px;
+        background-color: #ffcc00;
+        color: #333;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    #submit-feedback:hover {
+        background-color: #ffdb4d;
+    }
+    #feedback-text::placeholder {
+    color: #fff; /* Колір тексту "Залиши коментар..." */
+    }
+    #feedback-text{
+        color:white;
+    }
+</style>
+</head>
+<body>
+<div id="game-area">
+    <h1>Заверши гру</h1>
+    <div id="feedback-form">
+        <div class="stars-container">
+            <span class="star" data-value="1">&#9733;</span>
+            <span class="star" data-value="2">&#9733;</span>
+            <span class="star" data-value="3">&#9733;</span>
+            <span class="star" data-value="4">&#9733;</span>
+            <span class="star" data-value="5">&#9733;</span>
+        </div>
+        <textarea id="feedback-text" placeholder="Напишіть свій відгук..."></textarea>
+    </div>
+    <button id="end-game-button">Завершити гру</button>
+</div>
+
+<script>
+    let isMovementEnabled = true;
+
+    document.getElementById('end-game-button').addEventListener('click', function() {
+        const stars = document.querySelectorAll('.star');
+        let rating = 0;
+        stars.forEach(star => {
+            if (star.classList.contains('active')) {
+                rating = parseInt(star.getAttribute('data-value'));
+            }
+        });
+        const feedbackText = document.getElementById('feedback-text').value;
+
+        // Тут можна додати логіку для відправлення відгуку і оцінки на сервер або обробити їх локально
+
+        console.log('Рейтинг:', rating);
+        console.log('Відгук:', feedbackText);
+
+        // Очищення поля відгуку після відправлення
+        document.getElementById('feedback-text').value = '';
+
+        if (window.top){
+				window.top.postMessage('victory', '*')
+			}
+    });
+
+    document.getElementById('end-game-button').addEventListener('mouseenter', function(event) {
+        if (isMovementEnabled) {
+            const buttonWidth = document.getElementById('end-game-button').offsetWidth;
+            const buttonHeight = document.getElementById('end-game-button').offsetHeight;
+            const maxX = window.innerWidth - buttonWidth;
+            const maxY = window.innerHeight - buttonHeight;
+            const randomX = Math.max(0, Math.min(maxX, Math.floor(Math.random() * maxX)));
+            const randomY = Math.max(0, Math.min(maxY, Math.floor(Math.random() * maxY)));
+
+            document.getElementById('end-game-button').style.left = randomX + 'px';
+            document.getElementById('end-game-button').style.top = randomY + 'px';
+        }
+    });
+
+    document.getElementById('feedback-form').addEventListener('click', function(event) {
+        if (event.target.classList.contains('star')) {
+            const stars = document.querySelectorAll('.star');
+            const value = parseInt(event.target.getAttribute('data-value'));
+            stars.forEach(star => {
+                star.classList.remove('active');
+            });
+            // Додайте клас "active" до всіх зірок до тієї, на яку клікнув користувач
+            event.target.classList.add('active');
+            const clickedIndex = parseInt(event.target.getAttribute('data-value'));
+            for (let i = 0; i < clickedIndex; i++) {
+                stars[i].classList.add('active');
+            }
+        }
+    });
+
+    document.getElementById('game-area').addEventListener('contextmenu', function(event) {
+        event.preventDefault(); // Забороняємо відображення власного контекстного меню браузера
+        const previousMenu = document.querySelector('.context-menu');
+        if (previousMenu) {
+            previousMenu.remove();
+        }
+
+        const contextMenu = document.createElement('div');
+        contextMenu.classList.add('context-menu');
+        contextMenu.innerHTML = '<button id="disable-movement-button">Заборонити переміщення кнопки</button>';
+        contextMenu.style.position = 'absolute';
+        contextMenu.style.top = event.clientY + 'px';
+        contextMenu.style.left = event.clientX + 'px';
+        contextMenu.style.backgroundColor = '#760dbd';
+        contextMenu.style.border = '1px solid black';
+        contextMenu.style.padding = '10px';
+        contextMenu.style.borderRadius = '5px';
+        contextMenu.style.boxShadow = '0 5px 10px rgba(0, 0, 0, 0.2)';
+        contextMenu.style.transition = 'opacity 0.3s ease';
+        contextMenu.style.zIndex = 3;
+
+        document.body.appendChild(contextMenu);
+
+        document.getElementById('disable-movement-button').style.backgroundColor = '#9710f1';
+        document.getElementById('disable-movement-button').style.color = 'white';
+        document.getElementById('disable-movement-button').style.border = 'none';
+        document.getElementById('disable-movement-button').style.padding = '8px 16px';
+        document.getElementById('disable-movement-button').style.cursor = 'pointer';
+
+        document.getElementById('disable-movement-button').addEventListener('click', function() {
+            isMovementEnabled = false;
+            contextMenu.style.opacity = 0;
+            setTimeout(() => {
+                contextMenu.remove();
+            }, 300);
+        });
+
+        document.body.addEventListener('click', function() {
+            contextMenu.style.opacity = 0;
+            setTimeout(() => {
+                contextMenu.remove();
+            }, 300);
+        }, { once: true });
+    });
+
+</script>
+</body>
+</html>

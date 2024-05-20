@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Відкрити магазин</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #5ee98cb2;
+    user-select: none;
+}
+
+h1 {
+    font-size: 2rem;
+    color: #e2dada;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 30px;
+    background-color: #4ac974e7;
+    border-radius: 10px;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    left: 31%;
+}
+
+.container {
+    position: relative;
+    width: 80%;
+    max-width: 600px;
+    margin-bottom: 20px;
+    position: absolute;
+    top: 13%;
+    left: 25.5%;
+}
+
+.shop-image {
+    display: block;
+    width: 90%;
+    height: auto;
+    pointer-events: none;
+    top: 100%;
+}
+
+.shop-status {
+    position: absolute;
+    top: 65%;
+    left: 34%;
+    transform: translate(-50%, -50%);
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #e61d1de1;
+    border-radius: 10px;
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #ff00de, 0 0 70px #ff00de, 0 0 80px #ff00de, 0 0 100px #ff00de, 0 0 150px #ff00de;
+    user-select: none;
+}
+
+.fake-cards {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    max-width: 600px;
+    margin-top: auto;
+}
+
+.fake-card {
+    width: calc(30% - 20px); /* Зменшено ширину картки для більшого розміру */
+    max-width: 150px; /* Максимальна ширина картки */
+    height: 150px; /* Змінено висоту картки на 200px */
+    padding: 20px;
+    background-color: #ffffffda;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    margin: 0 10px;
+    margin-bottom: 20px;
+}
+
+.fake-card img {
+    max-width: 100%;
+    max-height: 140px; /* Зменшено максимальну висоту зображення в картці */
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+
+.cross {
+    position: fixed;
+    width: 100px;
+    height: 100px;
+    background-image: url('img/cross.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s, transform 0.5s;
+}
+
+.cross.visible {
+    opacity: 1;
+    transform: scale(1.5);
+}
+.green-bg {
+    background-color: #4CAF50; /* Зелений колір фону */
+}
+
+</style>
+</head>
+<body>
+    <h1>Відкрити магазин</h1>
+    <div class="container">
+        <img src="img/shop.png" alt="Банк" class="shop-image">
+        <p id="shopStatus" class="shop-status" ondblclick="editStatus()">Closed</p>
+        <div class="cross"></div>
+    </div>
+
+    <div class="fake-cards">
+        <div class="fake-card" draggable="true" ondragstart="drag(event)">
+            <img src="img/item1.png" alt="Предмет 1">
+        </div>
+        <div class="fake-card" draggable="true" ondragstart="drag(event)">
+            <img src="img/item2.png" alt="Предмет 2">
+        </div>
+        <div class="fake-card" draggable="true" ondragstart="drag(event)">
+            <img src="img/item3.png" alt="Предмет 3">
+        </div>
+    </div>
+
+    <script>
+        function editStatus() {
+            const shopStatus = document.getElementById('shopStatus');
+            let newStatus = prompt("Введіть новий статус:");
+            if (newStatus !== null && newStatus.trim() !== '') {
+                newStatus = newStatus.trim().toLowerCase();
+                newStatus = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
+                shopStatus.textContent = newStatus;
+                if (newStatus === 'Open') {
+                    if (window.top){
+                    window.top.postMessage('victory', '*')
+                }
+                    const container = document.querySelector('.shop-status');
+                    container.classList.add('green-bg'); // Додати клас для зміни кольору фону на зелений
+                }
+            }
+        }
+
+        function drag(event) {
+            event.dataTransfer.setData("text", event.target.alt);
+        }
+
+        const container = document.querySelector('.container');
+        container.addEventListener('dragover', function(event) {
+            event.preventDefault();
+        });
+
+        container.addEventListener('drop', function(event) {
+            event.preventDefault();
+            const data = event.dataTransfer.getData("text");
+            const cross = document.querySelector('.cross');
+            cross.style.top = `${window.innerHeight / 2}px`;
+            cross.style.left = `${window.innerWidth / 2}px`;
+            cross.classList.add('visible');
+            setTimeout(() => {
+                cross.classList.remove('visible');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

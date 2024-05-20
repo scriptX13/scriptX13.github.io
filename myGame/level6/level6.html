@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Підніми вантаж</title>
+<style>
+    body {
+        text-align: center;
+        background-color: #636e5c;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    h1 {
+        font-size: 3rem;
+        color: #c2c2c2;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        margin: 20px;
+        padding: 30px;
+        background-color: #50584b;
+        border-radius: 10px;
+        box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+        position: absolute;
+        top: 1%;
+    }
+
+    /* Стилі для контейнера екскаватора */
+    .excavator-container {
+        width: 65vw;
+        height: 70vh;
+        display: flex;
+        justify-content: center; /* Центрування по горизонталі */
+        align-items: center; /* Центрування по вертикалі */
+        margin-left: 14%;
+        position: absolute;
+        display:flex;
+        flex-direction: column;
+        align-items: center;
+        top: 20%;
+        left: 5%;
+    }
+    
+    .excavator-image {
+        width: 125%; /* Змінено max-width на width */
+        height: 125%; /* Змінено max-height на height */
+        object-fit: contain;
+        align-self: center; /* Центрування по вертикалі */
+        -webkit-user-drag: none; /* Safari */
+        -khtml-user-drag: none; /* Конфігурації WebKit */
+        -moz-user-drag: none; /* Firefox */
+        -o-user-drag: none; /* Opera */
+    }
+    
+    /* Стилі для числа на екскаваторі */
+    .excavator-number, .stone-number {
+        position: absolute;    
+        font-weight: bold;
+        color: #bd6d23;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 2.5vw;
+        
+    }
+
+    .excavator-number {
+        top: 41.5%;
+        left: 79%;
+        font-size: 2rem;
+    }
+
+    .stone-number {
+        top: 49.5%;
+        left: 8.8%;
+        rotate: -45deg;
+        font-size: 20px;
+        
+    }
+
+    .weight-max {
+
+        position: absolute;
+        font-size: 20px; /* Змінено розмір шрифту для відповідності дизайну */
+        color: #bd6d23;
+        font-weight: bold;
+        top: 45.5%;
+        left: 72%; /* Задано відповідне положення */
+        transform: translate(-50%, -50%); /* Центрування по горизонталі та вертикалі */
+    }
+    
+
+    /* Стилі для кнопки "Try!" */
+    .try-button {
+        position: absolute;
+        bottom: 10%;
+        left: 48%;
+        transform: translateX(-50%);
+        padding: 20px 40px;
+        font-size: 18px;
+        background-color: #50584b;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .try-button:hover {
+        background-color: #718b61;
+        
+    }
+
+    * {
+        user-select: none;
+        white-space: nowrap;
+    }
+
+</style>
+</head>
+<body>
+    <h1>ПІДНІМИ ВАНТАЖ</h1>
+<div class="excavator-container">
+    <img src="img/main1.png" alt="Екскаватор" class="excavator-image">
+    <div class="excavator-number" id="craneWeight">20</div>
+    <div class="weight-max">TONS-MAX</div>
+    <div class="stone-number" id="craneWeight">40 TONS</div>
+    <button class="try-button" onclick="checkWeight()">Try!</button>
+</div>
+
+<script>
+    let craneWeightLimit = 20;
+    
+    function updateCraneWeightLimit(newLimit) {
+        craneWeightLimit = newLimit;
+        document.getElementById('craneWeight').innerText = craneWeightLimit;
+    }
+    
+    document.getElementById('craneWeight').addEventListener('dblclick', function() {
+        let newLimit = prompt("Введіть нове значення:");
+        newLimit = parseInt(newLimit);
+    
+        if (newLimit && newLimit >= 40) {
+            updateCraneWeightLimit(newLimit);
+        }
+    });
+
+    function checkWeight() {
+        if (craneWeightLimit >= 40) {
+            if (window.top){
+                    window.top.postMessage('victory', '*')
+                };
+        } else {
+            alert('Невдача!');
+        }
+    }
+    
+    document.getElementById('craneWeight').innerText = craneWeightLimit;
+</script>
+
+</body>
+</html>

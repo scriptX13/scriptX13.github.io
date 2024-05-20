@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Трикуники</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #cf3e63;
+            user-select: none; /* Отключение выделения текста */
+        }
+        h1 {
+            position: absolute;
+            top: 20px;
+            font-size: 2.5rem;
+            color: #fff;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 30px;
+            background-color: #da6885;
+            border-radius: 10px;
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+        }
+        .container {
+            text-align: center;
+            width: 100%;
+            max-width: 1000px;
+        }
+        .image-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        img {
+            max-height: 70vh;
+            max-width: 100%;
+            margin-right: 100px;
+            user-select: none; /* Отключение выделения текста */
+            -webkit-user-drag: none; /* Отключение перетаскивания для Safari */
+            -webkit-user-select: none; /* Отключение выделения текста для Safari */
+        }
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        input[type="number"] {
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            width: calc(100% - 24px);
+            max-width: 300px;
+            box-sizing: border-box;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+            background-color: #da6885;
+            color: #fff;
+            text-align: center;
+            user-select: none; /* Отключение выделения текста */
+        }
+        input[type="number"]::placeholder {
+            color: #fff;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #da6885;
+            color: #fff;
+            letter-spacing: 1px;
+            user-select: none; /* Отключение выделения текста */
+        }
+        button:hover {
+            background-color: #bf2a4f;
+        }
+        #result {
+            position: fixed;
+            top: 63%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transition: opacity 0.5s;
+            user-select: none; /* Отключение выделения текста */
+        }
+    </style>
+</head>
+<body>
+    <h1>Скільки трикутників на картинці?</h1>
+    <div class="container">
+        <div class="image-container">
+            <img src="img/3.png" alt="Triangles" id="triangle-image">
+        </div>
+        <div class="input-container">
+            <input type="number" id="triangle-count" placeholder="Введіть правильну кількість..">
+            <button onclick="checkAnswer()">Try</button>
+        </div>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        function checkAnswer() {
+            const correctCount = 24;
+            const userCount = parseInt(document.getElementById('triangle-count').value);
+            const result = document.getElementById('result');
+
+            if (userCount === correctCount) {
+                result.textContent = "Чудово!";
+                if (window.top){
+                    window.top.postMessage('victory', '*')
+                }
+                result.style.color = "white";
+            } else {
+                result.textContent = "Спробуйте ще раз.";
+                result.style.color = "white";
+            }
+
+            result.style.opacity = 1;
+            setTimeout(() => {
+                result.style.opacity = 0;
+            }, 1500); // Сообщение исчезнет через 3 секунды
+        }
+    </script>
+</body>
+</html>

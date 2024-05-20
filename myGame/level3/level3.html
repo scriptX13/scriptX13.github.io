@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Гра з дверима</title>
+<style>
+/* Заборона перетягування елементів */
+    * {
+        -webkit-user-drag: none; /* Safari */
+        -khtml-user-drag: none; /* Конфігурації WebKit */
+        -moz-user-drag: none; /* Firefox */
+        -o-user-drag: none; /* Opera */
+    }
+
+    body {
+        -webkit-user-select: none; /* Safari */
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* IE 10+ */
+        user-select: none; /* Стандарт */
+        font-family: Arial, sans-serif;
+        background-color: #e2d277;
+    }
+    h1 {
+        font-size: 3rem;
+        color: #333;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin: 20;
+        padding: 30px;
+        background-color: #b6a960;
+        border-radius: 10px;
+        box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+        }
+    .game-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 80vh;
+    }
+
+    .doors-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+    }
+
+    .door {
+        position: relative;
+        width: 150px;
+        height: 200px;
+        display: inline-block;
+        cursor: pointer;
+        transition: transform 0.3s ease-in-out; /* Плавна анімація підняття */
+        z-index: 1;
+        margin-bottom: 40px;
+        background-image: url('img/door_image.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center; /* Відцентрувати зображення */
+        background-origin: content-box; /* Враховувати розмір контенту для позиціонування */
+    }
+
+    .door::before {
+        content: "";
+        position: absolute;
+        width: 68%;
+        height: 20%;
+        bottom: 0;
+        left: 21px;
+        box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.3); /* Тінь знизу */
+    }
+
+    .door.lifted {
+        transform: translateY(-50px); /* Підняття двері */
+    }
+
+    .door.lowered {
+        transform: translateY(0); /* Опускання двері */
+        transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1); /* Плавна анімація опускання */
+    }
+
+    .correct {
+        background-color: rgba(0, 128, 0, 0.123);
+    }
+
+    .gold-coin {
+        width: 80px;
+        height: 80px;
+        background-image: url('img/gold_coin.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+        position: absolute;
+        top: calc(25%); /* Позиціонування монети за двер'ю */
+        left: calc(25%); /* Позиціонування монети за двер'ю */
+        z-index: 0;
+    }
+
+    .cross {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -200%); /* Додано для центрування */
+        width: 50px;
+        height: 50px;
+        background-image: url('img/cross.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.5s, transform 0.5s;
+        z-index: 2;
+    }
+
+    .cross.visible {
+        opacity: 1;
+        z-index: 2;
+        transform: translate(-60%, -225%) scale(1.5);
+    }
+
+    .door img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Зображення буде вписане в розмір дверей */
+    }
+
+    .lifted {
+        animation: liftAnimation 1s forwards; /* Анімація підняття триває 1 секунду */
+    }
+
+    @keyframes liftAnimation {
+        0% {
+            transform: translateY(0);
+        }
+        100% {
+            transform: translateY(-50px);
+        }
+    }
+
+    .door-row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+
+</style>
+</head>
+<body>
+    <h1>Знайди підходящі двері</h1>
+    <div class="game-container">
+        <div class="doors-container">
+            <div class="gold-coin"></div>
+            <div class="cross"></div> <!-- Додано червоний хрестик -->
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        let doorsContainer = document.querySelector('.doors-container');
+        let goldCoin = document.querySelector('.gold-coin');
+        let cross = document.querySelector('.cross');
+        let doors = [];
+        let totalDoors = 11; // Початкова кількість дверей
+        let correctDoorIndex = Math.floor(Math.random() * totalDoors); // Визначення правильної двері
+        let liftedDoor = null; // Поточна піднята дверь
+
+        generateDoors(totalDoors); // Створити початкові двері
+
+        function generateDoors(count) {
+            for (let i = 0; i < Math.min(count, 21); i++) {
+                let door = createDoor(i);
+                doorsContainer.appendChild(door);
+                doors.push(door);
+            }
+
+            function createDoor(index) {
+                let door = document.createElement('div');
+                door.classList.add('door');
+                door.id = `door${index + 1}`;
+
+                door.addEventListener('click', () => {
+                    if (index === correctDoorIndex) {
+                        goldCoin.style.display = 'block';
+                        if (window.top){
+                            window.top.postMessage('victory', '*')
+                        };
+                    } else {
+                        door.classList.add('wrong');
+                        cross.style.top = `${door.offsetTop + door.offsetHeight}px`;
+                        cross.style.left = `${door.offsetLeft + door.offsetWidth / 2}px`;
+                        cross.classList.add('visible');
+
+                        setTimeout(() => {
+                            door.classList.remove('wrong');
+                            cross.classList.remove('visible');
+                            totalDoors++; // Додати одну дверь до загальної кількості дверей
+                            generateNewDoor(); // Згенерувати одну нову дверь
+                            updateCorrectDoorIndex(); // Оновити правильну дверь
+                            showCoinBehindCorrectDoor(); // Показати монету за новою правильною двер'ю
+                        }, 1000);
+                    }
+                });
+
+                door.addEventListener('mousedown', (event) => {
+                    if (event.which === 1) {
+                        door.classList.add('lifted');
+                        if (liftedDoor && liftedDoor !== door) {
+                            loweredDoor(liftedDoor);
+                        }
+                        liftedDoor = door;
+                    }
+                });
+
+                door.addEventListener('mouseup', () => {
+                    door.classList.remove('lifted');
+                    if (liftedDoor) {
+                        loweredDoor(liftedDoor);
+                        liftedDoor = null;
+                    }
+                });
+
+                return door;
+            }
+
+            function generateNewDoor() {
+                if (totalDoors <= 21) {
+                    let newDoor = createDoor(totalDoors - 1); // Створити нову дверь з останнім індексом
+                    doorsContainer.appendChild(newDoor);
+                    doors.push(newDoor);
+                }
+            }
+
+            function loweredDoor(door) {
+                door.classList.remove('lifted');
+                door.classList.add('lowered');
+                setTimeout(() => {
+                    door.classList.remove('lowered');
+                }, 1000); // Опускати підняту дверь після певного часу
+            }
+
+            function updateCorrectDoorIndex() {
+                correctDoorIndex = Math.floor(Math.random() * totalDoors); // Оновити правильну дверь
+            }
+
+            // Показувати монету за правильною двер'ю
+            function showCoinBehindCorrectDoor() {
+                let correctDoor = doors[correctDoorIndex];
+                goldCoin.style.top = `${correctDoor.offsetTop - goldCoin.offsetHeight + 200}px`;
+                goldCoin.style.left = `${correctDoor.offsetLeft + 30}px`;
+                goldCoin.style.display = 'block';
+            }
+
+            showCoinBehindCorrectDoor();
+        }
+    });
+</script>
+
+</body>
+</html>

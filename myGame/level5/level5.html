@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Збери речі в аеропорт</title>
+<style>
+    h1 {
+        position: relative;
+        font-size: 2.5rem;
+        color: #333;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        padding: 20px;
+        background-color: #17b473;
+        border-radius: 10px;
+        box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+        margin: 20px;
+        margin-bottom: 0px;
+    }
+    body {
+        user-select: none;
+        -moz-user-select: none; /* Для Firefox */
+        -webkit-user-select: none; /* Для Safari та Chrome */
+        -ms-user-select: none; /* Для Internet Explorer/Edge */
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #1ef199;
+    }
+
+    .container {
+        position: absolute;
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 20px;
+        text-align: center;
+        left: 17%;
+        top: 23%;
+    }
+
+    .game-area {
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 20px;
+        position: relative; /* Додано для позиціонування */
+        box-shadow: 0.3em 0.3em 1em rgba(0, 0, 0, 0.3);
+    }
+
+    .suitcase {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .suitcase img {
+        max-width: 100px;
+        cursor: pointer;
+    }
+
+    .items {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap; /* Додано для перенесення елементів на новий ряд */
+        gap: 70px; /* Додано відступ між елементами */
+        margin-top: 20px;
+    }
+
+    .items img {
+        max-width: 80px;
+        margin: 0 10px;
+        cursor: pointer;
+    }
+
+    .message {
+        margin-top: 20px;
+        font-weight: bold;
+    }
+
+    /* Стилізація кнопки */
+    #restartButton {
+        display: block;
+        margin: 20px auto; /* Центрування горизонтально */
+        padding: 10px 20px;
+        background-color: #4CAF50; /* Зелений колір */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease; /* Плавна анімація при наведенні */
+    }
+
+    #restartButton:hover {
+        background-color: #45a049; /* Зміна кольору при наведенні */
+    }
+
+    /* Стилізація хрестика */
+    .cross {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        background-image: url('img/cross.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.5s, transform 0.5s;
+        z-index: 2;
+    }
+
+    .cross.visible {
+        opacity: 1;
+        z-index: 2;
+        transform: scale(1.5);
+    }
+
+    /* Стилізація галочки */
+    .tick {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        background-image: url('img/tick.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.5s, transform 0.5s;
+        z-index: 2;
+    }
+
+    .tick.visible {
+        opacity: 1;
+        z-index: 2;
+        transform: scale(1.5);
+    }
+</style>
+</head>
+<body>
+    <h1>Збери всі потрібні речі з собою в аеропорт</h1>
+    <div class="container">
+        <div class="game-area">
+            <div class="items">
+                <img src="img/documents.png" class="draggable" id="documents" alt="Документи" onclick="showTick(event)">
+                <img src="img/pc.png" class="draggable" id="pc" alt="Комп'ютер" onclick="showTick(event)">        
+                <img src="img/alcohol.png" class="draggable" id="alcohol" alt="Алкоголь" onclick="showTick(event)">
+                <img src="img/phone.png" class="draggable" id="phone" alt="Телефон" onclick="showTick(event)">
+                <img src="img/portable.png" class="draggable" id="portable" alt="Колонка" onclick="showTick(event)">
+                <img src="img/key.png" class="draggable" id="key" alt="Ключі" onclick="showTick(event)">
+                <div class="suitcase" id="suitcase" onclick="showTick(event)">
+                    <img src="img/suitcase.png" alt="Валіза">
+                </div>
+            </div>            
+            <div class="items">
+                <img src="img/palmtree.png" class="draggable" id="palmtree" alt="Пальма" onclick="showTick(event)">
+                <img src="img/spade.png" class="draggable" id="spade" alt="Лопата" onclick="showTick(event)">
+                <img src="img/wallet.png" class="draggable" id="wallet" alt="Гаманець" onclick="showTick(event)">
+                <img src="img/giraffe.png" class="draggable" id="giraffe" alt="Жираф" onclick="showTick(event)">
+                <img src="img/ticket.png" class="draggable" id="ticket" alt="Квиток" onclick="showTick(event)">
+                <img src="img/scissor.png" class="draggable" id="scissor" alt="Ножиці" onclick="showTick(event)">
+                <img src="img/grilling.png" class="draggable" id="grilling" alt="Гриль" onclick="showTick(event)">
+            </div>
+            <div class="items">
+                <!-- Додайте сюди інші зображення предметів -->
+            </div>
+            <div class="message" id="message"></div>
+            <button onclick="restartGame()" id="restartButton" style="display: none;">Рестарт</button>
+        </div>
+    </div>
+
+<script>
+// JavaScript-код
+const suitcase = document.getElementById('suitcase');
+const message = document.getElementById('message');
+const restartButton = document.getElementById('restartButton');
+const mainItems = ['documents', 'ticket', 'phone', 'key', 'wallet'];
+const nonMainItems = ['alcohol', 'portable', 'spade', 'giraffe', 'scissor', 'pc', 'palmtree', 'grilling'];
+
+// Збереження початкового HTML для кожного контейнера
+const itemsContainers = document.querySelectorAll('.items');
+let initialItemsHTML = [];
+
+itemsContainers.forEach(container => {
+    initialItemsHTML.push(container.innerHTML);
+});
+
+// Функція для додавання обробників подій до предметів
+function addDraggableEventListeners() {
+    // Перетягування предметів до валізи
+    document.querySelectorAll('.draggable').forEach(item => {
+        item.addEventListener('click', e => {
+            e.preventDefault(); // Забороняємо дії за замовчуванням
+            const itemId = e.target.id;
+            if (mainItems.includes(itemId)) {
+                showTick(e);
+            } else if (nonMainItems.includes(itemId)) {
+                showCrossMark(e);
+            }
+        });
+    });
+}
+
+// Функція для показу зображення галочки
+function showTick(event) {
+    event.stopPropagation(); // Зупиняємо подальше розповсюдження події
+    const target = event.currentTarget;
+    const itemId = target.id;
+    if (mainItems.includes(itemId) || itemId === 'suitcase') { // Перевірка, чи є предмет основним або валізою
+        const tick = document.createElement('div');
+        tick.classList.add('tick');
+        tick.style.top = `${event.clientY - 25}px`; // Розміщення галочки по вертикалі
+        tick.style.left = `${event.clientX - 25}px`; // Розміщення галочки по горизонталі
+        document.body.appendChild(tick);
+        setTimeout(() => {
+            tick.classList.add('visible');
+        }, 10);
+        setTimeout(() => {
+            tick.remove(); // Видаляємо галочку через певний час
+        }, 2000);
+    }
+}
+
+// Функція для показу зображення хрестика
+function showCrossMark(event) {
+    event.stopPropagation(); // Зупиняємо подальше розповсюдження події
+    const target = event.currentTarget;
+    const cross = document.createElement('div');
+    cross.classList.add('cross');
+    cross.style.top = `${event.clientY - 25}px`; // Розміщення хрестика по вертикалі
+    cross.style.left = `${event.clientX - 25}px`; // Розміщення хрестика по горизонталі
+    document.body.appendChild(cross);
+    setTimeout(() => {
+        cross.classList.add('visible');
+    }, 10);
+    setTimeout(() => {
+        cross.remove(); // Видаляємо хрестик через певний час
+    }, 2000);
+}
+
+// Перетягування предметів до валізи
+document.querySelectorAll('.draggable').forEach(item => {
+    item.addEventListener('dragstart', e => {
+        e.dataTransfer.setData('text/plain', e.target.id);
+    });
+});
+
+suitcase.addEventListener('dragover', e => {
+    e.preventDefault();
+});
+
+suitcase.addEventListener('drop', e => {
+    e.preventDefault();
+    const itemId = e.dataTransfer.getData('text');
+    const item = document.getElementById(itemId);
+    if (item) {
+        suitcase.appendChild(item);
+        item.classList.add('packed');
+        item.style.display = 'none'; // Зміна стилю для приховання предмету
+        checkItems();
+    }
+});
+
+// Функція для перевірки, чи всі основні предмети взято
+function checkItems() {
+    let allMainPacked = mainItems.every(itemId => {
+        const item = document.getElementById(itemId);
+        return item && item.classList.contains('packed');
+    });
+    if (allMainPacked) {
+        let nonMainItemsPacked = nonMainItems.every(itemId => {
+            const item = document.getElementById(itemId);
+            return !item || !item.classList.contains('packed');
+        });
+        if (nonMainItemsPacked) {
+            message.textContent = 'Ви взяли всі потрібні речі! Гра завершена.';
+            if (window.top){
+                    window.top.postMessage('victory', '*')
+                };
+        } else {
+            message.textContent = 'У валізі є не потрібні предмети! Гра не завершена.';
+            restartButton.style.display = 'inline-block'; // Показуємо кнопку рестарту
+        }
+    }
+}
+
+// Функція для розміщення предметів на початкових позиціях
+function resetItemsPosition() {
+    itemsContainers.forEach((container, index) => {
+        container.innerHTML = initialItemsHTML[index]; // Відновлення початкового HTML-коду
+    });
+    addDraggableEventListeners(); // Додавання обробників подій до предметів
+}
+
+// Виклик функції для додавання обробників подій до предметів
+addDraggableEventListeners();
+
+// JavaScript-код
+// Функція для рестарту гри та оновлення сторінки
+function restartGame() {
+    location.reload(); // Оновлення сторінки
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Break Brain</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #535353;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .menu-container {
+            text-align: center;
+            background-color: #213a1c;
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            height: 100%;
+        }
+        h1 {
+            font-size: 6rem;
+            color: #333;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 5px; /* Збільшуємо відстань між літерами */
+            padding: 30px;
+            padding-left: 10px;
+            padding-right: 10px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 150px;
+            margin-top: 150px;
+        }
+        h1 span {
+            display: inline-block;
+            animation: bounce 1s infinite, colorChange 6s infinite;
+        }
+        h1 span:nth-child(1) { animation-delay: 0s; }
+        h1 span:nth-child(2) { animation-delay: 0.1s; }
+        h1 span:nth-child(3) { animation-delay: 0.2s; }
+        h1 span:nth-child(4) { animation-delay: 0.3s; }
+        h1 span:nth-child(5) { animation-delay: 0.4s; }
+        h1 span:nth-child(6) { animation-delay: 0.5s; }
+        h1 span:nth-child(7) { animation-delay: 0.6s; }
+        h1 span:nth-child(8) { animation-delay: 0.7s; }
+        h1 span:nth-child(9) { animation-delay: 0.8s; }
+        h1 span:nth-child(10) { animation-delay: 0.9s; }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes colorChange {
+            0%, 100% { color: #ff0000; } /* Червоний */
+            5% { color: #ff4000; } /* Оранжевий */
+            10% { color: #ff8000; } /* Помаранчевий */
+            15% { color: #ffbf00; } /* Жовтий */
+            20% { color: #ffff00; } /* Жовтий */
+            25% { color: #bfff00; } /* Жовтозелений */
+            30% { color: #80ff00; } /* Лаймовий */
+            35% { color: #40ff00; } /* Зелений */
+            40% { color: #00ff00; } /* Зелений */
+            45% { color: #00ff40; } /* Зелений */
+            50% { color: #00ff80; } /* Зелений */
+            55% { color: #00ffbf; } /* Зелений */
+            60% { color: #00ffff; } /* Ціан */
+            65% { color: #00bfff; } /* Світло-блакитний */
+            70% { color: #0080ff; } /* Синій */
+            75% { color: #0040ff; } /* Синій */
+            80% { color: #0000ff; } /* Синій */
+            85% { color: #4000ff; } /* Фіолетовий */
+            90% { color: #8000ff; } /* Фіолетовий */
+            95% { color: #bf00ff; } /* Фіолетовий */
+        }
+
+        .menu-button {
+            display: block;
+            width: 200px;
+            padding: 10px;
+            margin: 35px auto;
+            font-size: 20px;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        #start-button {
+            background-color: #4CAF50; /* Зелений колір для кнопки "Почати" */
+        }
+        #start-button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+        #exit-button {
+            background-color: #f44336; /* Червоний колір для кнопки "Вийти" */
+        }
+        #exit-button:hover {
+            background-color: #e53935;
+            transform: translateY(-2px);
+        }
+        #authors-button {
+            background-color: #1e88e5; /* Темно-синій колір для кнопки "Автори" */
+        }
+        #authors-button:hover {
+            background-color: #1976d2;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-container">
+        <h1>
+            <span>B</span><span>r</span><span>e</span><span>a</span><span>k</span>
+            <span> </span><span>B</span><span>r</span><span>a</span><span>i</span><span>n</span>
+        </h1>
+        <button id="start-button" class="menu-button">Почати</button>
+        <button id="authors-button" class="menu-button">Автори</button>
+        <button id="exit-button" class="menu-button">Вийти</button>
+    </div>
+    <script>
+
+        function startGame() {
+            // Перехід на рівень 1 (Game/level1/level1.html)
+            window.location.href = 'Game/level1/level1.html';
+        }
+
+        document.getElementById('start-button').addEventListener('click', function() {
+            startGame(); // Виклик функції для початку гри
+        });
+
+        document.getElementById('exit-button').addEventListener('click', function() {
+            if (confirm('Ви дійсно хочете вийти?')) {
+                window.close();
+            }

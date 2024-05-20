@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Допоможи капітану</title>
+<style>
+h1 {
+    font-size: 2rem;
+    color: #2e2e2e;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin: 20px;
+    padding: 30px;
+    background-color: #8bcbd1;
+    border-radius: 10px;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+    top: 1px;
+    position: absolute;
+    }
+
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: url("img/bg.jpg");
+    background-size: no-repeat;
+    background-position: center;
+    background-size: cover;
+    user-select: none;
+    pointer-events: none;
+}
+
+#delphine {
+    display: flex;
+    width: 100px;
+    height: 100px;
+    top: 40%;
+    pointer-events: none;
+}
+
+#game-area {
+    position: relative;
+}
+
+#game-image {
+    width: 600px;
+    height: 600px;
+}
+
+#game-overlay,
+#game-overlay1,
+#game-overlay2 {
+    cursor: default;
+}
+
+#game-overlay {
+    position: absolute;
+    top: 60%;
+    left: 43%;
+    width: 120px;
+    height: 120px;
+    clip-path: polygon(10% 34%, 20% 38%, 35% 65%, 14% 85%);
+    pointer-events: all;
+}
+
+#game-overlay1 {
+    position: absolute;
+    top: 64%;
+    left: 33%;
+    width: 120px;
+    height: 120px;
+    clip-path: polygon(25% 18%, 40% 15%, 34% 70%, 10% 40%);
+    pointer-events: all;
+}
+
+#game-overlay2 {
+    position: absolute;
+    top: 64%;
+    left: 40%;
+    width: 120px;
+    height: 120px;
+    clip-path: polygon(80% 20%, 90% 23%, 13% 100%, 0% 100%);
+    pointer-events: all;
+}
+</style>
+</head>
+<body>
+    <h1>Капітан дуже стомився, допоможіть йому продовжити свій шлях</h1>
+    <img src="img/delphin.png" alt="Дельфін" id="delphine">
+    <div id="game-area">
+        <img src="img/boat.png" alt="Головна картинка" id="game-image">
+        <div id="game-overlay" ondragover="allowDrop(event)" ondrop="checkDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></div>
+        <div id="game-overlay1" ondragover="allowDrop(event)" ondrop="checkDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></div>
+        <div id="game-overlay2" ondragstart="startDrag(event)" draggable="true"></div>
+    </div>
+
+    <script>
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function startDrag(event) {
+            event.dataTransfer.setData('text/plain', 'dragged');
+        }
+
+        function checkDrop(event) {
+            event.preventDefault();
+            const draggedData = event.dataTransfer.getData('text/plain');
+            if (draggedData === 'dragged') {
+                const gameImage = document.getElementById('game-image');
+                gameImage.src = 'img/boat2.png';
+                if (window.top){
+                    window.top.postMessage('victory', '*')
+                };
+            }
+        }
+
+        function dragEnter(event) {
+            event.preventDefault();
+        }
+
+        function dragLeave(event) {
+            event.preventDefault();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кінець гри</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #535353;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .menu-container {
+            text-align: center;
+            background-color: #000000;
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            height: 100%;
+        }
+        h1 {
+            font-size: 6rem;
+            color: #333;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            padding: 30px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            margin-top: 300px;
+            margin-bottom: 150px;
+        }
+        h1 span {
+            display: inline-block;
+            animation: bounce 1s infinite, colorChange 6s infinite;
+        }
+        h1 span:nth-child(1) { animation-delay: 0s; }
+        h1 span:nth-child(2) { animation-delay: 0.1s; }
+        h1 span:nth-child(3) { animation-delay: 0.2s; }
+        h1 span:nth-child(4) { animation-delay: 0.3s; }
+        h1 span:nth-child(5) { animation-delay: 0.4s; }
+        h1 span:nth-child(6) { animation-delay: 0.5s; }
+        h1 span:nth-child(7) { animation-delay: 0.6s; }
+        h1 span:nth-child(8) { animation-delay: 0.7s; }
+        h1 span:nth-child(9) { animation-delay: 0.8s; }
+        h1 span:nth-child(10) { animation-delay: 0.9s; }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes colorChange {
+            0%, 100% { color: #ff0000; }
+            5% { color: #ff4000; }
+            10% { color: #ff8000; }
+            15% { color: #ffbf00; }
+            20% { color: #ffff00; }
+            25% { color: #bfff00; }
+            30% { color: #80ff00; }
+            35% { color: #40ff00; }
+            40% { color: #00ff00; }
+            45% { color: #00ff40; }
+            50% { color: #00ff80; }
+            55% { color: #00ffbf; }
+            60% { color: #00ffff; }
+            65% { color: #00bfff; }
+            70% { color: #0080ff; }
+            75% { color: #0040ff; }
+            80% { color: #0000ff; }
+            85% { color: #4000ff; }
+            90% { color: #8000ff; }
+            95% { color: #bf00ff; }
+        }
+
+        .menu-button {
+            display: block;
+            width: 200px;
+            padding: 10px;
+            margin: 10px auto;
+            font-size: 20px;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        #play-again-button {
+            background-color: #4CAF50;
+        }
+        #play-again-button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+        #quit-button {
+            background-color: #f44336;
+        }
+        #quit-button:hover {
+            background-color: #e53935;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-container">
+        <h1>
+            <span>B</span><span>R</span><span>E</span><span>A</span><span>K</span><span> </span>
+            <span>B</span><span>R</span><span>A</span><span>I</span><span>N</span>
+        </h1>
+        <p>Дякуємо за те що зіграли!</p>
+        <div class="buttons">
+            <button id="play-again-button" class="menu-button" onclick="playAgain()">Зіграти ще раз</button>
+            <button id="quit-button" class="menu-button" onclick="quitGame()">Вийти</button>
+        </div>
+    </div>
+    <script>
+        function playAgain() {
+            if (window.top) {
+                window.top.postMessage('playAgain', '*');
+            }
+        }
+
+        function quitGame() {
+            alert('Thanks for playing!');
+            window.close();
+        }
+    </script>
+</body>
+</html>

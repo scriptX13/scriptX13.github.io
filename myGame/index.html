@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 98vh;
+        }
+
+        #game {
+            width: 60%;
+            height: 100%;
+        }
+
+        #button {
+            position: absolute;
+            left: 90%;
+            top: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <iframe id="game" src="" width="1440" height="1200"></iframe>
+    </div>
+
+    <div id="button">
+        <input id="nextbutton" type="button" value="Наступний рівень" onclick="loadNextLevel()">
+        <input id="1nextbutton" type="button" value="Наступний рівень" onclick="loadNextLevel()">
+    </div>
+
+    <script>
+        var levelId = 0;
+        var maxLevels = 10;
+        var f = document.getElementById("game");
+        var b = document.getElementById("nextbutton");
+
+        window.onmessage = function(e) {
+            console.log("MESSAGE RECEIVED", e.data)
+            if (e.data == "victory") {
+                b.type = "button";
+                console.log("victory");
+            }
+        };
+
+        function loadNextLevel() {
+            levelId += 1;
+            if (levelId <= maxLevels) {
+                f.src = "level" + levelId + "/level" + levelId + ".html";
+                b.type = "hidden";
+            } else {
+                f.src = "gameOver.html";
+                b.style.display = "none"; // Hide the button after the last level
+            }
+        }
+
+        loadNextLevel(); // Одразу завантажуємо перший рівень
+
+        function checkIsSolved(){
+            console.log(f.window.isSolved)
+        }
+    </script>
+</body>
+</html>

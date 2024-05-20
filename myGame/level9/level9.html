@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Гра: Попугаї</title>
+<style>
+    * {
+        -webkit-user-drag: none; /* Safari */
+        -khtml-user-drag: none; /* Конфігурації WebKit */
+        -moz-user-drag: none; /* Firefox */
+        -o-user-drag: none; /* Opera */
+        }
+    body {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color:#b0eaf1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        flex-direction: column;
+        text-align: center;
+        -webkit-user-select: none; /* Safari */
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* IE 10+ */
+        user-select: none; /* Стандарт */
+    }
+
+    h1 {
+        font-size: 3rem;
+        color: #12646b;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        margin: 20px;
+        padding: 30px;
+        background-color: #8bcbd1;
+        border-radius: 10px;
+        box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+        top: 1px;
+        position: absolute;
+    }
+
+    .cages-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 300px;
+    }
+
+    .cage {
+        position: relative;
+        width: 150px;
+        height: 150px;
+        margin: 0 20px;
+        z-index: 2;
+        transition: transform 0.5s ease, opacity 0.3s ease;
+    }
+
+    .parrot {
+        background-image: url('img/parrot.png');
+        position: absolute;
+        top: 40%;
+        left: 30%;
+        width: 50%;
+        height: 50%;
+        background-size: cover;
+        background-position: center;
+        z-index: 1;
+        pointer-events: none;
+        transition: transform 0.5s ease, opacity 0.3s ease;
+    }
+
+    .flying-parrot {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        background-image: url('img/flyParrot.png');
+        background-size: cover;
+        background-position: center;
+        z-index: 3;
+        transition: transform 0.5s ease, opacity 0.3s ease;
+        opacity: 0;
+    }
+
+    .cage img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 2;
+    }
+
+    .checkbox-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .checkbox-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0 50px;
+    }
+
+    .checkbox-wrapper input[type="checkbox"] {
+        width: 24px;
+        height: 24px;
+        margin-bottom: 10px;
+        cursor: pointer;
+    }
+
+    .checkbox-wrapper label {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #12646b;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .try-button-container {
+        margin-top: 100px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .try-button-container button {
+        padding: 20px 50px;
+        font-size: 24px;
+        color: #fff;
+        background-color: #47cad6;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .try-button-container button:hover {
+        background-color: #3db4be;
+    }
+
+    #resultMessage {
+        margin-top: 20px;
+        font-size: 18px;
+        font-weight: bold;
+    }
+</style>
+</head>
+<body>
+    <h1>В якій клітці справжній папуга?</h1>
+    <div class="cages-container">
+        <div class="cage" id="cage1">
+            <img src="img/cage.png" alt="Клітка" class="cage-image">
+            <div class="parrot"></div>
+            <div class="flying-parrot"></div>
+        </div>
+        <div class="cage" id="cage2">
+            <img src="img/cage.png" alt="Клітка" class="cage-image">
+            <div class="parrot"></div>
+            <div class="flying-parrot"></div>
+        </div>
+        <div class="cage" id="cage3">
+            <img src="img/cage.png" alt="Клітка" class="cage-image">
+            <div class="parrot"></div>
+            <div class="flying-parrot"></div>
+        </div>
+    </div>
+
+    <div class="checkbox-container">
+        <div class="checkbox-wrapper">
+            <label for="check1">Клітка 1</label>
+            <input type="checkbox" id="check1">
+        </div>
+        <div class="checkbox-wrapper">
+            <label for="check2">Клітка 2</label>
+            <input type="checkbox" id="check2">
+        </div>
+        <div class="checkbox-wrapper">
+            <label for="check3">Клітка 3</label>
+            <input type="checkbox" id="check3">
+        </div>
+    </div>
+
+    <div class="try-button-container">
+        <button id="tryButton">Try</button>
+    </div>
+
+    <div id="resultMessage"></div>
+
+    <script>
+        const cages = document.querySelectorAll('.cage');
+
+        cages.forEach(cage => {
+            const parrotToHide = cage.querySelector('.parrot');
+            const flyingParrot = cage.querySelector('.flying-parrot');
+            let isLifted = false;
+
+            if (parrotToHide) {
+                cage.addEventListener('wheel', (event) => {
+                    event.preventDefault();
+                    if (event.deltaY < 0 && !isLifted) {
+                        isLifted = true;
+                        cage.style.transform = 'translateY(-100px)';
+                        if (cage.id === 'cage2' || cage.id === 'cage3') {
+                            flyingParrot.style.top = '-50px';
+                            flyingParrot.style.left = '50%';
+                            flyingParrot.style.transform = 'translateX(-50%)';
+                            flyingParrot.style.opacity = 1;
+                            parrotToHide.style.opacity = 0;
+                        }
+                    } else if (event.deltaY > 0 && isLifted) {
+                        isLifted = false;
+                        cage.style.transform = 'translateY(0)';
+                        parrotToHide.style.opacity = 1;
+                        flyingParrot.style.opacity = 0;
+                    }
+                });
+
+                cage.addEventListener('mouseleave', () => {
+                    if (isLifted) {
+                        cage.style.transform = 'translateY(0)';
+                        parrotToHide.style.opacity = 1;
+                        flyingParrot.style.opacity = 0;
+                        isLifted = false;
+                    }
+                });
+            }
+        });
+
+        document.getElementById('tryButton').addEventListener('click', () => {
+            const check1 = document.getElementById('check1').checked;
+            const check2 = document.getElementById('check2').checked;
+            const check3 = document.getElementById('check3').checked;
+            const resultMessage = document.getElementById('resultMessage');
+
+            if (check2 && check3 && !check1) {
+                resultMessage.textContent = 'Рівень пройдений!';
+                if (window.top){
+                    window.top.postMessage('victory', '*')
+                }
+                resultMessage.style.color = 'green';
+            } else {
+                resultMessage.textContent = 'Спробуйте ще раз';
+                resultMessage.style.color = 'red';
+            }
+        });
+    </script>
+</body>
+</html>

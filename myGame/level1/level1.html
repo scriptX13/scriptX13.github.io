@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Увімкнути комп'ютер</title>
+<style>
+    * {
+        -webkit-user-select: none; /* Safari */
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* IE 10+ */
+        -webkit-user-drag: none; /* Safari */
+        -khtml-user-drag: none; /* Конфігурації WebKit */
+        -moz-user-drag: none; /* Firefox */
+        -o-user-drag: none; /* Opera */
+    }
+    body {
+        background-color: #614949;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 55vh;
+        margin: 0;
+    }
+
+    .game-container {
+        position: relative;
+        width: 60%;
+        height: 20%;
+        margin-top: 100px;
+    }
+
+    img#computer {
+        /*width: 100%;
+        height: auto;*/
+        width:100%;
+        min-height:100%;
+        object-fit:cover;        
+    }
+
+    .zone-container {
+        /*
+        position: relative;
+        width: 100%;
+        height: 100%;*/
+        width:auto;
+        height:auto;
+        position:relative;
+        overflow:hidden;
+    }
+
+    
+    .zone {
+        cursor: pointer;
+        position: absolute;
+        width: 5%; /* Встановіть відповідну ширину відносно зображення комп'ютера */
+        height: 5%; /* Встановіть відповідну висоту відносно зображення комп'ютера */
+        border: 2px solid rgba(43, 255, 0, 0.315); /* Можете змінити кольори та стилі рамок */
+    }
+
+    #extensionArea {
+        top: 69.5%;
+        left: 9%;
+        width: 1.5%;
+        height: 1.3%;
+    }
+
+    #powerBtnArea {
+        top: 34.6%;
+        left: 75.8%;
+        width: 1.7%;
+        height: 2%;
+        border-radius: 10px;
+    }
+
+    #plugArea {
+        top: 52.7%;
+        left: 8%;
+        width: 3.3%;
+        height: 15.4%;
+    }
+
+    img {
+        user-select: none;
+        -webkit-user-drag: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+    }
+
+    h1 {
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 2rem; /* Змініть це значення на відповідну величину */
+        color: #e2dada;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        background-color: #5c4f4f;
+        border-radius: 10px;
+        box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+        padding: 10px 20px;
+    }
+</style>
+</head>
+<body>
+<h1>Увімкни комп'ютер</h1>
+<div class="game-container">
+    
+    <div class="zone-container">
+        <img src="img/computer.png" alt="Комп'ютер" id="computer">
+        <div id="extensionArea" class="zone"></div>
+        <div id="powerBtnArea" class="zone"></div>
+        <div id="plugArea" class="zone"></div>
+        
+    </div>
+</div>
+<script>
+    window.hasSolved=false;
+    let isExtensionOn = false;
+    let isPlugInserted = false;
+
+    function updateComputerImage() {
+        const computerImg = document.getElementById('computer');
+        const plugImg = 'img/new_plug.png';
+        const noPlugImg = 'img/no_plug.png';
+        const extensionImg = 'img/new_computer_extension.png';
+        const noExtensionImg = 'img/computer.png';
+
+        if (isExtensionOn && isPlugInserted) {
+            computerImg.src = extensionImg;
+        } else if (isExtensionOn && !isPlugInserted) {
+            computerImg.src = noPlugImg;
+        } else if (!isExtensionOn && isPlugInserted) {
+            computerImg.src = plugImg;
+        } else {
+            computerImg.src = noExtensionImg;
+        }
+    }
+
+    document.getElementById('extensionArea').addEventListener('click', function() {
+        isExtensionOn = !isExtensionOn;
+        updateComputerImage();
+    });
+
+    document.getElementById('plugArea').addEventListener('click', function() {
+        isPlugInserted = !isPlugInserted;
+        updateComputerImage();
+    });
+
+    document.getElementById('powerBtnArea').addEventListener('click', function() {
+        if (isExtensionOn && isPlugInserted) {
+            const computerImg = document.getElementById('computer');
+            const computerOnImg = 'img/computer_on.png';
+            computerImg.src = computerOnImg;
+            console.log("victory")
+            console.log(window.top)
+            if (window.top){
+				window.top.postMessage('victory', '*')
+			}
+            window.hasSolved=true;
+        }
+    });
+</script>
+</body>
+</html>
